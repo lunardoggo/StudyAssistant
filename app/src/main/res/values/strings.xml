@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">StudyAssistant</string>
+    <string name="tab_text_1">Timer</string>
+    <string name="tab_text_2">Planner</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
