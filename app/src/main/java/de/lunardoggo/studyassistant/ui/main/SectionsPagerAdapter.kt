@@ -17,17 +17,15 @@ private val TAB_TITLES = arrayOf(
  */
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
+    private val planner : PlannerFragment = PlannerFragment.newInstance();
     private val timer : TimerFragment = TimerFragment.newInstance();
 
     override fun getItem(position: Int): Fragment {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        lateinit var fragment : Fragment;
-        when(position) {
-            0 -> fragment = this.timer;
-            else -> fragment = PlaceholderFragment.newInstance(position + 1);
+        return when(position) {
+            0 -> this.timer;
+            1 -> this.planner;
+            else -> throw NotImplementedError();
         }
-        return fragment;
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

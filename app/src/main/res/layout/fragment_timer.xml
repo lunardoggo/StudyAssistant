@@ -10,67 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
+        <Button
+            android:id="@+id/toggleStartButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="-1dp"
+            android:layout_marginEnd="-1dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/start"
+            android:textColor="#575757"
+            android:textSize="10pt"
+            app:cornerRadius="0pt"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timerProgress">
-
-            <Button
-                android:id="@+id/toggleStartButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:text="Start"
-                android:textColor="#575757"
-                android:textSize="10pt"
-                app:cornerRadius="0pt"
-                app:strokeColor="#575757"
-                app:strokeWidth="1pt" />
-
-            <Button
-                android:id="@+id/pauseButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="Pause"
-                android:textColor="#575757"
-                android:textSize="10pt"
-                app:cornerRadius="0pt"
-                app:strokeColor="#6A6A6A"
-                app:strokeWidth="1dp" />
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/timerProgress"
+            app:layout_constraintVertical_bias="1.0"
+            app:strokeColor="#575757"
+            app:strokeWidth="1dp" />
 
         <ProgressBar
             android:id="@+id/timerProgress"
             style="?android:progressBarStyleHorizontal"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="190dp"
             android:layout_marginEnd="31dp"
             android:layout_marginBottom="191dp"
-            android:progress="0"
-            android:progressDrawable="@drawable/circle"
-            android:rotation="-90"
             android:max="1000"
+            android:progress="0"
+            android:progressDrawable="@drawable/circle_gray"
+            android:rotation="-90"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.75" />
 
         <TextView
             android:id="@+id/timerLabel"

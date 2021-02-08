@@ -24,6 +24,9 @@ class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learning
         this.timer.TimerTicked += ::onTimerTicked;
     }
 
+    public var isRunning : Boolean = false
+        get() { return this.currentStatus != SessionStatus.FINISHED && this.currentStatus != SessionStatus.NONE; }
+
     public fun start() {
         if(!this.timer.isRunning){
             this.currentStatus = SessionStatus.LEARNING;
@@ -58,14 +61,11 @@ class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learning
                     this.timer.start(this.breakMilliseconds);
                     this.LearningIntervalCompleted.invoke(this.currentLearningInterval);
                 } else {
-                    this.LearningSessionCompleted.invoke(this.learningIntervals);
                     this.currentStatus = SessionStatus.FINISHED;
+                    this.LearningSessionCompleted.invoke(this.learningIntervals);
                 }
             }
-            SessionStatus.FINISHED -> {
-                //TODO Error
-            }
-            SessionStatus.NONE -> {
+            else -> {
                 //TODO Error
             }
         }
