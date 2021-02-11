@@ -11,4 +11,7 @@ class StudySessionConfiguration {
 
     public var breakTimeMinutes = 5
         get set;
+
+    public var intervalCount = 3
+        get set;
 }

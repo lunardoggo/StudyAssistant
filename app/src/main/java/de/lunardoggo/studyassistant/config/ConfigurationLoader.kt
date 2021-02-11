@@ -18,6 +18,8 @@ class ConfigurationLoader {
                 context.getString(R.string.config_studySessions_learningMinutes), Context.MODE_PRIVATE);
         config.studySessions.breakTimeMinutes = preferences.getInt(
                 context.getString(R.string.config_studySessions_breakMinutes), Context.MODE_PRIVATE);
+        config.studySessions.intervalCount = preferences.getInt(
+                context.getString(R.string.config_studySessions_intervalCount), Context.MODE_PRIVATE);
 
         return config;
     }
@@ -27,6 +29,7 @@ class ConfigurationLoader {
         with(preferences.edit()) {
             putInt(context.getString(R.string.config_studySessions_learningMinutes), config.studySessions.learningTimeMinutes);
             putInt(context.getString(R.string.config_studySessions_breakMinutes), config.studySessions.breakTimeMinutes);
+            putInt(context.getString(R.string.config_studySessions_intervalCount), config.studySessions.intervalCount);
             apply();
         }
     }
