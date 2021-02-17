@@ -21,6 +21,7 @@ import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.config.ConfigurationLoader
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
 import de.lunardoggo.studyassistant.learning.sessions.SessionTimer
+import de.lunardoggo.studyassistant.ui.notifications.NotificationHelper
 import java.text.DecimalFormat
 
 class TimerFragment : Fragment() {
@@ -33,12 +34,14 @@ class TimerFragment : Fragment() {
     private var breakMilliseconds : Long = 0;
     private var intervalCount : Int = 0;
 
+    private lateinit var intervalDisplayLabel : TextView;
     private lateinit var timerProgress : ProgressBar;
     private lateinit var toggleStartButton : Button;
     private lateinit var timerLabel : TextView;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fragment = inflater.inflate(R.layout.fragment_timer, container, false);
+        this.intervalDisplayLabel = fragment.findViewById(R.id.intervalDisplayLabel);
         this.timerProgress = fragment.findViewById(R.id.timerProgress);
         this.timerLabel = fragment.findViewById(R.id.timerLabel);
 
@@ -59,21 +62,28 @@ class TimerFragment : Fragment() {
             this.updateConfigBeforeStart();
             this.timer.start();
             this.updateTimerDisplay(this.learningMilliseconds, this.learningMilliseconds, SessionStatus.LEARNING);
+            this.updateIntervalDisplayLabel(1, this.intervalCount);
+            NotificationHelper.sendSessionProgressNotification(this.requireContext(), this.timer.currentStatus, 0, this.intervalCount);
         }
         this.updateStartToggleButtonText();
     }
 
     private fun onTimerLearningIntervalFinished(intervalNumber : Int) {
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
+        NotificationHelper.sendSessionProgressNotification(this.requireContext(), this.timer.currentStatus, intervalNumber, this.intervalCount);
     }
 
     private fun onTimerLearningIntervalStarted(intervalNumber : Int) {
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
+        this.updateIntervalDisplayLabel(intervalNumber + 1, this.intervalCount);
+        NotificationHelper.sendSessionProgressNotification(this.requireContext(), this.timer.currentStatus, intervalNumber, this.intervalCount);
     }
 
     private fun onLearningSessionCompleted(completedIntervals : Int) {
         this.resetTimerDisplay(SessionStatus.FINISHED);
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
+        this.updateIntervalDisplayLabel(completedIntervals, this.intervalCount);
+        NotificationHelper.sendSessionProgressNotification(this.requireContext(), this.timer.currentStatus, 0, this.intervalCount);
     }
 
     private fun onTimerTicked(remainingMilliseconds: Long) {
@@ -108,10 +118,15 @@ class TimerFragment : Fragment() {
         }
     }
 
+    private fun updateIntervalDisplayLabel(currentCount : Int, totalCount : Int) {
+        this.intervalDisplayLabel.text = "$currentCount/$totalCount";
+    }
+
     private fun resetTimerDisplay(newStatus : SessionStatus) {
         this.updateTimerDisplay(1, 0, newStatus);
         this.timerProgress.progress = this.timerProgress.max;
         this.updateStartToggleButtonText();
+        this.updateIntervalDisplayLabel(0, 0);
     }
 
     private fun getProgressDrawable(status : SessionStatus) : Drawable {
@@ -146,8 +161,8 @@ class TimerFragment : Fragment() {
 
         val config = ConfigurationLoader.instance.load(this.requireContext());
 
-        this.learningMilliseconds = (config.studySessions.learningTimeMinutes * 60 * 1000).toLong();
-        this.breakMilliseconds = (config.studySessions.breakTimeMinutes * 60 * 1000).toLong();
+        this.learningMilliseconds = 5000;//(config.studySessions.learningTimeMinutes * 60 * 1000).toLong();
+        this.breakMilliseconds = 5000;//(config.studySessions.breakTimeMinutes * 60 * 1000).toLong();
         this.intervalCount = config.studySessions.intervalCount;
 
         this.timer = SessionTimer(this.learningMilliseconds, this.breakMilliseconds, this.intervalCount);

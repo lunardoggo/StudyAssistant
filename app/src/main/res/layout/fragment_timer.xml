@@ -53,6 +53,30 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.75" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/interval"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/intervalDisplayLabel"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:text="0/0"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/timerLabel"
             android:layout_width="wrap_content"
