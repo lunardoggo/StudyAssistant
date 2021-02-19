@@ -13,4 +13,7 @@
     <string name="config_studySessions_intervalCount">study_sessions.intervals</string>
 
     <string name="title_activity_main">MainActivity</string>
+
+    <string name="alert_cancelSession_title">Cancel session</string>
+    <string name="alert_cancelSession_message">Do you really want to cancel the current learing session?</string>
 </resources>

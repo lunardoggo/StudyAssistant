@@ -6,22 +6,20 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Bundle
-import android.se.omapi.Session
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import de.lunardoggo.studyassistant.R
+import de.lunardoggo.studyassistant.android.AlertHelper
 import de.lunardoggo.studyassistant.config.ConfigurationLoader
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
 import de.lunardoggo.studyassistant.learning.sessions.SessionTimer
-import de.lunardoggo.studyassistant.ui.notifications.NotificationHelper
+import de.lunardoggo.studyassistant.android.NotificationHelper
 import java.text.DecimalFormat
 
 class TimerFragment : Fragment() {
@@ -56,8 +54,10 @@ class TimerFragment : Fragment() {
 
     private fun onToggleStartPressed(view : View) {
         if(this.timer.isRunning) {
-            this.timer.stop();
-            this.resetTimerDisplay(SessionStatus.NONE);
+            val context = this.requireContext();
+            val title = context.resources.getString(R.string.alert_cancelSession_title);
+            val message = context.resources.getString(R.string.alert_cancelSession_message);
+            AlertHelper.createYesNoAlert(this.requireContext(), title, message) { _dialog, _ -> _dialog.dismiss(); this.stopTimer(); }.show();
         } else {
             this.updateConfigBeforeStart();
             this.timer.start();
@@ -66,6 +66,13 @@ class TimerFragment : Fragment() {
             NotificationHelper.sendSessionProgressNotification(this.requireContext(), this.timer.currentStatus, 0, this.intervalCount);
         }
         this.updateStartToggleButtonText();
+    }
+
+    private fun stopTimer() {
+        if(this.timer.isRunning) {
+            this.timer.stop();
+            this.resetTimerDisplay(SessionStatus.NONE);
+        }
     }
 
     private fun onTimerLearningIntervalFinished(intervalNumber : Int) {
@@ -161,8 +168,8 @@ class TimerFragment : Fragment() {
 
         val config = ConfigurationLoader.instance.load(this.requireContext());
 
-        this.learningMilliseconds = 5000;//(config.studySessions.learningTimeMinutes * 60 * 1000).toLong();
-        this.breakMilliseconds = 5000;//(config.studySessions.breakTimeMinutes * 60 * 1000).toLong();
+        this.learningMilliseconds = (config.studySessions.learningTimeMinutes * 60 * 1000).toLong();
+        this.breakMilliseconds = (config.studySessions.breakTimeMinutes * 60 * 1000).toLong();
         this.intervalCount = config.studySessions.intervalCount;
 
         this.timer = SessionTimer(this.learningMilliseconds, this.breakMilliseconds, this.intervalCount);

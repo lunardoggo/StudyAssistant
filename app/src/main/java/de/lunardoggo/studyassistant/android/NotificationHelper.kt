@@ -1,4 +1,4 @@
-package de.lunardoggo.studyassistant.ui.notifications
+package de.lunardoggo.studyassistant.android
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,7 +6,6 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import de.lunardoggo.studyassistant.R
-import de.lunardoggo.studyassistant.android.VersionFeatures
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
 
 class NotificationHelper {
@@ -15,18 +14,18 @@ class NotificationHelper {
         private const val SessionProgressNotificationId = 1;
 
         public fun sendSessionProgressNotification(context : Context, status : SessionStatus, currentInterval : Int, totalIntervals : Int) {
-            val content = this.getSessionStatusContent(status, currentInterval, totalIntervals);
+            val content = getSessionStatusContent(status, currentInterval, totalIntervals);
             val icon = R.drawable.ic_launcher_foreground;
-            val title = this.getSessionStatusTile(status);
+            val title = getSessionStatusTile(status);
 
-            val builder = this.getNotificationBuilder(context, NotificationChannelId, icon, title, content);
+            val builder = getNotificationBuilder(context, NotificationChannelId, icon, title, content);
             builder.priority = NotificationCompat.PRIORITY_DEFAULT;
 
-            this.sendNotification(context, builder);
+            sendNotification(context, builder);
         }
 
         private fun sendNotification(context : Context, builder : NotificationCompat.Builder) {
-            this.createNotificationChannel(context);
+            createNotificationChannel(context);
             with(NotificationManagerCompat.from(context)) {
                 notify(SessionProgressNotificationId, builder.build());
             }
@@ -78,7 +77,7 @@ class NotificationHelper {
 
         private fun createNotificationChannel(context : Context) {
             if(VersionFeatures.notificationsRequireCreatedChannel()) {
-                val channel = NotificationChannel(this.NotificationChannelId, "Study Assistant Notifications", NotificationManager.IMPORTANCE_DEFAULT).apply {
+                val channel = NotificationChannel(NotificationChannelId, "Study Assistant Notifications", NotificationManager.IMPORTANCE_DEFAULT).apply {
                     description = "Notification channel for the Study Assistant app."
                 }
 
