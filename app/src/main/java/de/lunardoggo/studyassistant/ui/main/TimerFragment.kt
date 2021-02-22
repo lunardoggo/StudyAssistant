@@ -20,6 +20,7 @@ import de.lunardoggo.studyassistant.config.ConfigurationLoader
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
 import de.lunardoggo.studyassistant.learning.sessions.SessionTimer
 import de.lunardoggo.studyassistant.android.NotificationHelper
+import de.lunardoggo.studyassistant.ui.animations.ProgressBarAnimation
 import java.text.DecimalFormat
 
 class TimerFragment : Fragment() {
@@ -32,6 +33,7 @@ class TimerFragment : Fragment() {
     private var breakMilliseconds : Long = 0;
     private var intervalCount : Int = 0;
 
+    private lateinit var progressBarAnimation: ProgressBarAnimation;
     private lateinit var intervalDisplayLabel : TextView;
     private lateinit var timerProgress : ProgressBar;
     private lateinit var toggleStartButton : Button;
@@ -43,12 +45,13 @@ class TimerFragment : Fragment() {
         this.timerProgress = fragment.findViewById(R.id.timerProgress);
         this.timerLabel = fragment.findViewById(R.id.timerLabel);
 
+        this.progressBarAnimation = ProgressBarAnimation(this.timerProgress);
+
         this.toggleStartButton = fragment.findViewById(R.id.toggleStartButton);
         this.toggleStartButton.setOnClickListener { _view ->
             this.onToggleStartPressed(_view);
         };
         this.resetTimerDisplay(SessionStatus.NONE);
-
         return fragment;
     }
 
@@ -104,7 +107,7 @@ class TimerFragment : Fragment() {
     private fun updateTimerDisplay(totalMilliseconds : Long, remainingMilliseconds : Long, currentStatus : SessionStatus) {
         val minutes = (remainingMilliseconds.toDouble() / (60 * 1000)).toLong();
         val seconds = ((remainingMilliseconds.toDouble() / 1000) - (minutes * 60)).toLong();
-        val percent = ((remainingMilliseconds.toDouble() / totalMilliseconds) * 1000).toInt();
+        val percent = ((remainingMilliseconds.toDouble() / totalMilliseconds) * this.timerProgress.max).toFloat();
 
         if(this.lastSessionStatus != currentStatus) {
             this.timerProgress.progressDrawable = this.getProgressDrawable(currentStatus);
@@ -112,15 +115,19 @@ class TimerFragment : Fragment() {
         }
         this.timerLabel.text = "${this.numberFormat.format(minutes)}:${this.numberFormat.format(seconds)}";
 
-        this.timerProgress.progress = percent;
+        this.timerProgress.progress = percent.toInt();
+
+        this.progressBarAnimation.setStartEndValue(percent, (((remainingMilliseconds - this.timer.tickInterval).toDouble() / totalMilliseconds) * this.timerProgress.max).toFloat());
+        this.progressBarAnimation.duration = this.timer.tickInterval;
+        this.timerProgress.startAnimation(this.progressBarAnimation);
     }
 
     private fun updateStartToggleButtonText() {
         if(this.timer.isRunning) {
-            this.toggleStartButton.text = this.getString(R.string.stop)!!;
+            this.toggleStartButton.text = this.getString(R.string.stop);
             this.toggleStartButton.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.lightRed));
         } else {
-            this.toggleStartButton.text = this.getString(R.string.start)!!;
+            this.toggleStartButton.text = this.getString(R.string.start);
             this.toggleStartButton.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.green));
         }
     }
@@ -177,18 +184,18 @@ class TimerFragment : Fragment() {
     }
 
     private fun attachTimerEvents() {
-        this.timer.LearningIntervalCompleted += ::onTimerLearningIntervalFinished;
-        this.timer.LearningIntervalStarted += ::onTimerLearningIntervalStarted;
-        this.timer.LearningSessionCompleted += ::onLearningSessionCompleted;
-        this.timer.TimerTicked += ::onTimerTicked;
+        this.timer.learningIntervalCompleted += ::onTimerLearningIntervalFinished;
+        this.timer.learningIntervalStarted += ::onTimerLearningIntervalStarted;
+        this.timer.learningSessionCompleted += ::onLearningSessionCompleted;
+        this.timer.timerTicked += ::onTimerTicked;
     }
 
     private fun detachTimerEvents() {
         if(this.timer != null) {
-            this.timer.LearningIntervalCompleted -= ::onTimerLearningIntervalFinished;
-            this.timer.LearningIntervalStarted -= ::onTimerLearningIntervalStarted;
-            this.timer.LearningSessionCompleted -= ::onLearningSessionCompleted;
-            this.timer.TimerTicked -= ::onTimerTicked;
+            this.timer.learningIntervalCompleted -= ::onTimerLearningIntervalFinished;
+            this.timer.learningIntervalStarted -= ::onTimerLearningIntervalStarted;
+            this.timer.learningSessionCompleted -= ::onLearningSessionCompleted;
+            this.timer.timerTicked -= ::onTimerTicked;
         }
     }
 }

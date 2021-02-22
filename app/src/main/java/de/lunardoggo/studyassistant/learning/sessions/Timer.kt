@@ -4,24 +4,24 @@ import android.os.CountDownTimer
 import de.lunardoggo.studyassistant.events.Event
 
 class Timer {
-    public val TimerFinished = Event<Long>();
-    public val TimerTicked = Event<Long>();
+    public val timerFinished = Event<Long>();
+    public val timerTicked = Event<Long>();
 
     private var timer : CountDownTimer? = null;
 
     public var isRunning : Boolean = false
             private set;
 
-    public fun start(milliseconds : Long) {
+    public fun start(milliseconds : Long, tickInterval : Long) {
         if(this.timer == null && !this.isRunning) {
-            this.timer = object: CountDownTimer(milliseconds, 100) {
+            this.timer = object: CountDownTimer(milliseconds, tickInterval) {
                 override fun onTick(remainingMillis: Long) {
-                    TimerTicked.invoke(remainingMillis);
+                    timerTicked.invoke(remainingMillis);
                 }
 
                 override fun onFinish() {
                     stop();
-                    TimerFinished.invoke(0);
+                    timerFinished.invoke(0);
                 }
             }
             this.timer!!.start();

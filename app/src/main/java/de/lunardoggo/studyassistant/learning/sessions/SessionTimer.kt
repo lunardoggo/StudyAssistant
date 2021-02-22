@@ -4,14 +4,17 @@ import de.lunardoggo.studyassistant.events.Event
 
 class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learningIntervals: Int) {
 
-    public val LearningIntervalCompleted = Event<Int>();
-    public val LearningSessionCompleted = Event<Int>();
-    public val LearningIntervalStarted = Event<Int>();
-    public val TimerTicked = Event<Long>();
+    public val learningIntervalCompleted = Event<Int>();
+    public val learningSessionCompleted = Event<Int>();
+    public val learningIntervalStarted = Event<Int>();
+    public val timerTicked = Event<Long>();
 
     private val learningMilliseconds = learningMilliseconds;
     private val breakMilliseconds = breakMilliseconds;
     private val learningIntervals = learningIntervals;
+
+    public var tickInterval : Long = 1000
+        get set;
 
     public var currentStatus = SessionStatus.NONE
         private set;
@@ -20,8 +23,8 @@ class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learning
     private var timer : Timer = Timer();
 
     init {
-        this.timer.TimerFinished += ::onTimerFinished;
-        this.timer.TimerTicked += ::onTimerTicked;
+        this.timer.timerFinished += ::onTimerFinished;
+        this.timer.timerTicked += ::onTimerTicked;
     }
 
     public var isRunning : Boolean = false
@@ -30,7 +33,7 @@ class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learning
     public fun start() {
         if(!this.timer.isRunning){
             this.currentStatus = SessionStatus.LEARNING;
-            this.timer.start(this.learningMilliseconds);
+            this.timer.start(this.learningMilliseconds, this.tickInterval);
             this.currentLearningInterval = 0;
         }
     }
@@ -44,25 +47,25 @@ class SessionTimer(learningMilliseconds: Long, breakMilliseconds: Long, learning
     }
 
     private fun onTimerTicked(remainingMilliseconds : Long) {
-        this.TimerTicked.invoke(remainingMilliseconds);
+        this.timerTicked.invoke(remainingMilliseconds);
     }
 
     private fun onTimerFinished(placeholder: Long) {
         when(this.currentStatus) {
             SessionStatus.TAKING_BREAK -> {
                 this.currentStatus = SessionStatus.LEARNING;
-                this.timer.start(this.learningMilliseconds);
+                this.timer.start(this.learningMilliseconds, this.tickInterval);
                 this.currentLearningInterval++;
-                this.LearningIntervalStarted.invoke(this.currentLearningInterval);
+                this.learningIntervalStarted.invoke(this.currentLearningInterval);
             }
             SessionStatus.LEARNING -> {
                 if(this.currentLearningInterval < this.learningIntervals - 1) {
                     this.currentStatus = SessionStatus.TAKING_BREAK;
-                    this.timer.start(this.breakMilliseconds);
-                    this.LearningIntervalCompleted.invoke(this.currentLearningInterval);
+                    this.timer.start(this.breakMilliseconds, this.tickInterval);
+                    this.learningIntervalCompleted.invoke(this.currentLearningInterval);
                 } else {
                     this.currentStatus = SessionStatus.FINISHED;
-                    this.LearningSessionCompleted.invoke(this.learningIntervals);
+                    this.learningSessionCompleted.invoke(this.learningIntervals);
                 }
             }
             else -> {
