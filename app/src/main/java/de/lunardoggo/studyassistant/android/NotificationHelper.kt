@@ -3,6 +3,7 @@ package de.lunardoggo.studyassistant.android
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import de.lunardoggo.studyassistant.R
@@ -12,6 +13,10 @@ class NotificationHelper {
     companion object {
         private const val NotificationChannelId = "studyassistant_notifications";
         private const val SessionProgressNotificationId = 1;
+
+        public fun showToastShortDuration(context : Context, text : String, duration : Int) {
+            Toast.makeText(context, text, duration).show();
+        }
 
         public fun sendSessionProgressNotification(context : Context, status : SessionStatus, currentInterval : Int, totalIntervals : Int) {
             val content = getSessionStatusContent(status, currentInterval, totalIntervals);

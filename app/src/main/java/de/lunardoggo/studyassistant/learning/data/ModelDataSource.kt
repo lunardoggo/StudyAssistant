@@ -7,4 +7,6 @@ interface ModelDataSource {
     public fun getPlannedSession(date: Long): PlannedSession;
     public fun savePlannedSession(session: PlannedSession);
     public fun getPlannedSessions(): List<PlannedSession>;
+
+
 }

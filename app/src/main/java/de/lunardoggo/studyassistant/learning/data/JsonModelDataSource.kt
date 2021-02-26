@@ -1,5 +1,7 @@
 package de.lunardoggo.studyassistant.learning.data
 
+import android.content.Context
+import de.lunardoggo.studyassistant.learning.io.AppFileManager
 import de.lunardoggo.studyassistant.learning.models.PlannedSession
 import org.json.JSONArray
 import org.json.JSONObject
@@ -7,9 +9,9 @@ import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
-class JsonModelDataSource(filePath : String) : ModelDataSource {
+class JsonModelDataSource(context : Context) : ModelDataSource {
 
-    private val filePath : String = filePath;
+    private val fileManager = AppFileManager(context);
 
     override fun getPlannedSession(date: Long): PlannedSession {
         return this.getPlannedSessions().stream().filter{_session -> _session.date == date}.findFirst().get();
@@ -40,18 +42,7 @@ class JsonModelDataSource(filePath : String) : ModelDataSource {
     }
 
     private fun getSessionsJsonArray() : JSONArray {
-        val content = this.getFileContent();
+        val content = this.fileManager.readFileContent("data_session.json");
         return JSONArray(content);
-    }
-
-    private fun getFileContent() : String {
-        val scanner = Scanner(this.filePath);
-        val builder = StringBuilder();
-        scanner.use { scanner ->
-            while(scanner.hasNextLine()) {
-                builder.appendLine(scanner.nextLine());
-            }
-        }
-        return builder.toString();
     }
 }
