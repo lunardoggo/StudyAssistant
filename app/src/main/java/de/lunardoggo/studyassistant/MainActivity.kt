@@ -12,8 +12,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import de.lunardoggo.studyassistant.learning.models.Guid
 import de.lunardoggo.studyassistant.ui.activities.SettingsActivity
-import de.lunardoggo.studyassistant.ui.main.SectionsPagerAdapter
+import de.lunardoggo.studyassistant.ui.adapters.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {
 

@@ -18,4 +18,5 @@
     <color name="gold">#FFB700</color>
     <color name="gray">#AEAEAE</color>
     <color name="darkRed">#9E0000</color>
+    <color name="transparent">#00000000</color>
 </resources>

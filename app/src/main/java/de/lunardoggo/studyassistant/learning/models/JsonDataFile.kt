@@ -5,7 +5,7 @@ import java.lang.IllegalArgumentException
 
 class JsonDataFile(jsonContent : String) {
 
-    private lateinit var json : JSONObject;
+    private var json : JSONObject? = null;
     private val jsonContent = jsonContent;
 
     init {
@@ -16,7 +16,7 @@ class JsonDataFile(jsonContent : String) {
 
     public fun getFileVersion() : Version {
         if(this.json != null) {
-            val version = Version(this.json.getString("version"));
+            val version = Version(this.json!!.getString("version"));
             if(version != null && !version.isValid()) {
                 return version;
             }
@@ -27,7 +27,7 @@ class JsonDataFile(jsonContent : String) {
     public fun getModels() : List<JSONObject> {
         val output = ArrayList<JSONObject>();
         if(this.json != null) {
-            val models = this.json.getJSONArray("models");
+            val models = this.json!!.getJSONArray("models");
             for(i in 0..models.length()) {
                 output.add(models.getJSONObject(i));
             }

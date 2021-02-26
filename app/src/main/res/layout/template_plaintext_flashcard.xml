@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/accent_light"
+    android:id="@+id/flashcardBackground">
+
+    <TextView
+        android:id="@+id/flashcardTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="20dp"
+        android:padding="10dp"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/black"
+        android:textSize="16pt"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="10dp"
+        android:background="@color/accent"/>
+
+
+    <TextView
+        android:id="@+id/flashcardContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Content"
+        android:layout_below="@id/flashcardTitle"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="30dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="5dp"
+        android:textSize="10pt"/>
+</RelativeLayout>
