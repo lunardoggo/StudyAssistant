@@ -14,8 +14,11 @@ class FlashCardDataSource(fileManager : AppFileManager) {
     private val fileManager = fileManager;
 
     public fun getFlashCardGroups() : List<FlashCardGroup> {
-        val file = this.loadJsonData();
-        return this.getFlashCardGroups(file.getModels());
+        if(this.groups.size == 0) {
+            val file = this.loadJsonData();
+            this.groups.addAll(this.getFlashCardGroups(file.getModels()));
+        }
+        return this.groups;
     }
 
     private fun getFlashCardGroups(jsonObjects : List<JSONObject>) : List<FlashCardGroup> {

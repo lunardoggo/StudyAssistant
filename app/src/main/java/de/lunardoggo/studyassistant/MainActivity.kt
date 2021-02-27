@@ -1,22 +1,21 @@
 package de.lunardoggo.studyassistant
 
+import android.app.Notification
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import de.lunardoggo.studyassistant.learning.models.Guid
+import android.widget.Toast
+import de.lunardoggo.studyassistant.android.NotificationHelper
 import de.lunardoggo.studyassistant.ui.activities.SettingsActivity
 import de.lunardoggo.studyassistant.ui.adapters.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var tabLayout : TabLayout;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -24,15 +23,19 @@ class MainActivity : AppCompatActivity() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager);
         val viewPager: ViewPager = this.findViewById(R.id.view_pager);
         viewPager.adapter = sectionsPagerAdapter;
-        val tabs: TabLayout = this.findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+        this.tabLayout = this.findViewById(R.id.tabs);
+        this.tabLayout.setupWithViewPager(viewPager);
 
         val settingsButton : Button = this.findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(::onSettingsButtonClicked);
     }
 
-    public fun onSettingsButtonClicked(view : View) {
-        val intent = Intent(this, SettingsActivity::class.java);
-        this.startActivity(intent);
+    private fun onSettingsButtonClicked(view : View) {
+        if(this.tabLayout.selectedTabPosition < 2) {
+            val intent = Intent(this, SettingsActivity::class.java);
+            this.startActivity(intent);
+        } else {
+            NotificationHelper.showToastShortDuration(this.applicationContext, "Edit page coming soon!", Toast.LENGTH_SHORT);
+        }
     }
 }

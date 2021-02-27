@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/flashcardGroupSpinnerItemText"
+    android:layout_alignParentTop="true"
+    android:paddingStart="20dp"
+    android:padding="10dp"
+    android:text="Title"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="@android:color/black"
+    android:textSize="12pt"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:layout_editor_absoluteX="10dp"/>

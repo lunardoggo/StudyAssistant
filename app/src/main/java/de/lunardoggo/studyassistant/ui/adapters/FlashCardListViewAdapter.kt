@@ -1,13 +1,11 @@
 package de.lunardoggo.studyassistant.ui.adapters
 
-import android.R.attr
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import de.lunardoggo.studyassistant.R
@@ -19,14 +17,21 @@ import kotlin.math.roundToInt
 
 class FlashCardListViewAdapter : ArrayAdapter<FlashCard> {
 
-    private val flashcardGroup : FlashCardGroup;
+    public var flashcardGroup : FlashCardGroup = FlashCardGroup()
+        get() = field
+        set(value) {
+            field = value;
+            this.clear();
+            this.addAll(this.flashcardGroup.flashCards.toList());
+            this.notifyDataSetChanged();
+        };
 
-    constructor(context: Context, flashCards: FlashCardGroup) : super(
+    constructor(context: Context, flashcardGroup: FlashCardGroup) : super(
         context,
         R.layout.template_plaintext_flashcard,
-        flashCards.flashCards
+        flashcardGroup.flashCards.toList()
     ) {
-        this.flashcardGroup = flashCards;
+        this.flashcardGroup = flashcardGroup;
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -44,10 +49,12 @@ class FlashCardListViewAdapter : ArrayAdapter<FlashCard> {
         }
 
         val background = Color.parseColor(this.flashcardGroup.colorHex);
-        viewHolder.background!!.setBackgroundColor(background);
-        viewHolder.titleText!!.setBackgroundColor(this.alterColorBrightness(background, 0.8));
-        viewHolder.contentText!!.text = flashCard.content;
-        viewHolder.titleText!!.text = flashCard.title;
+        viewHolder.apply {
+            this.background!!.setBackgroundColor(background)
+            this.titleText!!.setBackgroundColor(alterColorBrightness(background, 0.8));
+            this.contentText!!.text = flashCard.content;
+            this.titleText!!.text = flashCard.title;
+        };
         return view;
     }
 

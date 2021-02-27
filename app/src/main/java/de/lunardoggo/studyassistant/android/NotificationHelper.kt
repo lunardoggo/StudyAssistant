@@ -45,7 +45,7 @@ class NotificationHelper {
                     "You finished $totalIntervals learning intervals";
                 }
                 SessionStatus.TAKING_BREAK -> {
-                    "Take a break, next learning interval: ${currentInterval + 1} of $totalIntervals";
+                    "Take a break, next learning interval: ${currentInterval + 2} of $totalIntervals";
                 }
                 else -> {
                     "undefined"
