@@ -12,6 +12,7 @@ import android.widget.Toast
 import de.lunardoggo.studyassistant.android.NotificationHelper
 import de.lunardoggo.studyassistant.ui.activities.SettingsActivity
 import de.lunardoggo.studyassistant.ui.adapters.SectionsPagerAdapter
+import de.lunardoggo.studyassistant.ui.main.FlashCardEditorActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,10 +33,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun onSettingsButtonClicked(view : View) {
         if(this.tabLayout.selectedTabPosition < 2) {
-            val intent = Intent(this, SettingsActivity::class.java);
-            this.startActivity(intent);
+            this.showSettingsPage();
         } else {
-            NotificationHelper.showToastShortDuration(this.applicationContext, "Edit page coming soon!", Toast.LENGTH_SHORT);
+            this.showEditFlashcardsView();
         }
+    }
+
+    private fun showSettingsPage() {
+        val intent = Intent(this, SettingsActivity::class.java);
+        this.startActivity(intent);
+    }
+
+    private fun showEditFlashcardsView() {
+        val intent = Intent(this, FlashCardEditorActivity::class.java);
+        this.startActivity(intent);
+        NotificationHelper.showToastShortDuration(this.applicationContext, "Edit page coming soon!", Toast.LENGTH_SHORT);
     }
 }

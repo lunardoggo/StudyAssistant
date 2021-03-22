@@ -1,16 +1,16 @@
 package de.lunardoggo.studyassistant.learning.models
 
 class FlashCardGroup {
-    public var id : Guid = Guid.empty()
+    public var id : Int = -1
         get set;
     public var name : String = ""
         get set;
-    public var colorHex : String = ""
+    public var color : Int = 0
         get set;
     public var subjectName : String = ""
         get set;
-    public val flashCards : ArrayList<FlashCard> = ArrayList()
-        get;
+    public var flashCards : List<FlashCard> = ArrayList()
+        get set;
 
     operator fun get(index : Int) : FlashCard {
         return this.flashCards[index];

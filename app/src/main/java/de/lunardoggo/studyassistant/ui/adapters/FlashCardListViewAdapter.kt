@@ -48,7 +48,7 @@ class FlashCardListViewAdapter : ArrayAdapter<FlashCard> {
             view = convertView;
         }
 
-        val background = Color.parseColor(this.flashcardGroup.colorHex);
+        val background = this.flashcardGroup.color;
         viewHolder.apply {
             this.background!!.setBackgroundColor(background)
             this.titleText!!.setBackgroundColor(alterColorBrightness(background, 0.8));
