@@ -14,7 +14,7 @@ import de.lunardoggo.studyassistant.learning.models.FlashCard
 import de.lunardoggo.studyassistant.learning.models.FlashCardGroup
 import de.lunardoggo.studyassistant.ui.adapters.FlashCardListViewAdapter
 import de.lunardoggo.studyassistant.ui.listener.OnFlashcardGroupSelectedListener
-import de.lunardoggo.studyassistant.ui.adapters.FlashCardGroupSpinnerAdapter;
+import de.lunardoggo.studyassistant.ui.adapters.FlashCardGroupsSpinnerAdapter
 
 class FlashCardsFragment : Fragment() {
 
@@ -22,7 +22,7 @@ class FlashCardsFragment : Fragment() {
     private lateinit var groupSelectionSpinner : Spinner;
     private lateinit var flashCardList : ListView;
 
-    private var spinnerAdapter : FlashCardGroupSpinnerAdapter? = null;
+    private var spinnerAdapter : FlashCardGroupsSpinnerAdapter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,47 +35,51 @@ class FlashCardsFragment : Fragment() {
         this.groupSelectionSpinner = view.findViewById(R.id.groupSelectionSpinner);
         this.flashCardList = view.findViewById(R.id.flashCardsList);
 
-        this.dataSource.saveFlashCardGroup(FlashCardGroup().apply {
-            this.color = Color.parseColor("#009933");
-            this.subjectName = "Testsubject 1";
-            this.name = "Testgroup 1";
-            this.flashCards = ArrayList<FlashCard>().apply {
-                this.add(FlashCard().apply {
-                    this.title = "Test 1";
-                    this.content = "Testcontent 1";
-                    this.type = FlashCard.FlashCardType.PLAINTEXT;
-                });
-                this.add(FlashCard().apply {
-                    this.title = "Test 2";
-                    this.content = "Testcontent 2";
-                    this.type = FlashCard.FlashCardType.PLAINTEXT;
-                });
-                this.add(FlashCard().apply {
-                    this.title = "Test 3";
-                    this.content = "Testcontent 3";
-                    this.type = FlashCard.FlashCardType.PLAINTEXT;
-                });
-            }
-        });
-        this.dataSource.saveFlashCardGroup(FlashCardGroup().apply {
-            this.color = Color.parseColor("#0066FF");
-            this.subjectName = "Testsubject 2";
-            this.name = "Testgroup 2";
-            this.flashCards = ArrayList<FlashCard>().apply {
-                this.add(FlashCard().apply {
-                    this.title = "Test 1";
-                    this.content = "Testcontent 1 - second group";
-                    this.type = FlashCard.FlashCardType.PLAINTEXT;
-                });
-                this.add(FlashCard().apply {
-                    this.title = "Test 2";
-                    this.content = "Testcontent 2 - second group";
-                    this.type = FlashCard.FlashCardType.PLAINTEXT;
-                });
-            }
-        });
 
-        this.spinnerAdapter = FlashCardGroupSpinnerAdapter(this.requireContext(), this.dataSource.getFlashCardGroups());
+        if(this.dataSource.getFlashCardGroups().isEmpty()) {
+            this.dataSource.saveFlashCardGroup(FlashCardGroup().apply {
+                this.color = Color.parseColor("#009933");
+                this.subjectName = "Testsubject 1";
+                this.name = "Testgroup 1";
+                this.flashCards = ArrayList<FlashCard>().apply {
+                    this.add(FlashCard().apply {
+                        this.title = "Test 1";
+                        this.content = "Testcontent 1";
+                        this.type = FlashCard.FlashCardType.PLAINTEXT;
+                    });
+                    this.add(FlashCard().apply {
+                        this.title = "Test 2";
+                        this.content = "Testcontent 2";
+                        this.type = FlashCard.FlashCardType.PLAINTEXT;
+                    });
+                    this.add(FlashCard().apply {
+                        this.title = "Test 3";
+                        this.content = "Testcontent 3";
+                        this.type = FlashCard.FlashCardType.PLAINTEXT;
+                    });
+                }
+            });
+            this.dataSource.saveFlashCardGroup(FlashCardGroup().apply {
+                this.color = Color.parseColor("#0066FF");
+                this.subjectName = "Testsubject 2";
+                this.name = "Testgroup 2";
+                this.flashCards = ArrayList<FlashCard>().apply {
+                    this.add(FlashCard().apply {
+                        this.title = "Test 1";
+                        this.content = "Testcontent 1 - second group";
+                        this.type = FlashCard.FlashCardType.PLAINTEXT;
+                    });
+                    this.add(FlashCard().apply {
+                        this.title = "Test 2";
+                        this.content = "Testcontent 2 - second group";
+                        this.type = FlashCard.FlashCardType.PLAINTEXT;
+                    });
+                }
+            });
+        }
+
+
+        this.spinnerAdapter = FlashCardGroupsSpinnerAdapter(this.requireContext(), this.dataSource.getFlashCardGroups());
         this.groupSelectionSpinner.adapter = this.spinnerAdapter;
         this.groupSelectionSpinner.onItemSelectedListener = OnFlashcardGroupSelectedListener().apply {
             this.itemSelectionChanged += ::onSelectedFlashCardGroupChanged;

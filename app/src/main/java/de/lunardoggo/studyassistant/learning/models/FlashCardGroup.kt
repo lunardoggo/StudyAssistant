@@ -9,7 +9,7 @@ class FlashCardGroup {
         get set;
     public var subjectName : String = ""
         get set;
-    public var flashCards : List<FlashCard> = ArrayList()
+    public var flashCards : ArrayList<FlashCard> = ArrayList()
         get set;
 
     operator fun get(index : Int) : FlashCard {

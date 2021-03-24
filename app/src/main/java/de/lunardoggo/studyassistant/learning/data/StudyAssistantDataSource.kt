@@ -46,12 +46,14 @@ class StudyAssistantDataSource {
                 group.subjectName = this.getString(this.getColumnIndexOrThrow(FlashCardGroupEntry.COLUMN_NAME_SUBJECT));
                 group.color = this.getInt(this.getColumnIndexOrThrow(FlashCardGroupEntry.COLUMN_NAME_COLOR));
                 group.flashCards = getFlashCards(group.id);
+
+                output.add(group);
             }
             return output;
         }
     }
 
-    private fun getFlashCards(groupId : Int) : List<FlashCard> {
+    private fun getFlashCards(groupId : Int) : ArrayList<FlashCard> {
         val cursor = this.getFlashCardsCursor(groupId);
         with(cursor) {
             val output = ArrayList<FlashCard>();
@@ -61,6 +63,8 @@ class StudyAssistantDataSource {
                 card.title = this.getString(this.getColumnIndexOrThrow(FlashCardEntry.COLUMN_NAME_TITLE));
                 card.content = this.getString(this.getColumnIndexOrThrow(FlashCardEntry.COLUMN_NAME_CONTENT));
                 card.type = FlashCard.FlashCardType.getById(this.getInt(this.getColumnIndexOrThrow(FlashCardEntry.COLUMN_NAME_TYPE)));
+
+                output.add(card);
             }
             return output;
         }

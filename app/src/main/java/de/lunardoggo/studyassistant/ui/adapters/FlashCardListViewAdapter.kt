@@ -22,34 +22,33 @@ class FlashCardListViewAdapter : ArrayAdapter<FlashCard> {
         set(value) {
             field = value;
             this.clear();
-            this.addAll(this.flashcardGroup.flashCards.toList());
+            this.addAll(this.flashcardGroup.flashCards);
             this.notifyDataSetChanged();
         };
 
     constructor(context: Context, flashcardGroup: FlashCardGroup) : super(
         context,
         R.layout.template_plaintext_flashcard,
-        flashcardGroup.flashCards.toList()
+        flashcardGroup.flashCards
     ) {
         this.flashcardGroup = flashcardGroup;
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val flashCard = this.flashcardGroup[position];
-        var viewHolder : ViewHolder;
-        var view : View;
+        val viewHolder : ViewHolder;
+        val view : View;
         if(convertView == null) {
             val inflater = LayoutInflater.from(this.context);
             view = inflater.inflate(R.layout.template_plaintext_flashcard, parent, false);
-            viewHolder = this.getViewHolder(view);
-            view.tag = viewHolder;
+            viewHolder = this.getViewHolder(view).also { view.tag = it };
         } else {
             viewHolder = convertView.tag as ViewHolder;
             view = convertView;
         }
 
         val background = this.flashcardGroup.color;
-        viewHolder.apply {
+        with(viewHolder) {
             this.background!!.setBackgroundColor(background)
             this.titleText!!.setBackgroundColor(alterColorBrightness(background, 0.8));
             this.contentText!!.text = flashCard.content;

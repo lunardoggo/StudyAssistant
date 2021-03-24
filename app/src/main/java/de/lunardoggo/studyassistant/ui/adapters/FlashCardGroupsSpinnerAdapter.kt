@@ -9,7 +9,7 @@ import android.widget.TextView
 import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.learning.models.FlashCardGroup
 
-class FlashCardGroupSpinnerAdapter : ArrayAdapter<FlashCardGroup> {
+class FlashCardGroupsSpinnerAdapter : ArrayAdapter<FlashCardGroup> {
 
     companion object {
         private const val layoutResource = R.layout.template_spinner_item_flashcardgroup;
