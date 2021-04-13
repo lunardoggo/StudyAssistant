@@ -22,14 +22,36 @@
                 android:theme="@style/Theme.StudyAssistant.AppBarOverlay"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/saveFlashCardButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/materialdesignicons"
-                    android:minHeight="?actionBarSize"
-                    android:text="&#xF12C;"
-                    android:textSize="16pt" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/saveFlashCardButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/materialdesignicons"
+                        android:minHeight="?actionBarSize"
+                        android:text="&#xF12C;"
+                        android:textSize="16pt"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/discardFlashCardButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/materialdesignicons"
+                        android:minHeight="?actionBarSize"
+                        android:text="&#xF055;"
+                        android:textSize="16pt"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <Spinner
@@ -63,7 +85,7 @@
                 android:minHeight="200dp"
                 android:hint="Content" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!--androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp">
@@ -92,7 +114,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/colorSaturationBar"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout-->
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

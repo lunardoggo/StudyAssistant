@@ -14,19 +14,36 @@
         android:minHeight="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <ListView
-        android:id="@+id/flashCardsList"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:divider="@color/transparent"
-        android:dividerHeight="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupSelectionSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/groupSelectionSpinner">
+
+        <ListView
+            android:id="@+id/flashCardsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/transparent"
+            android:dividerHeight="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_above="@+id/addCardButton"/>
+
+        <Button android:id="@+id/addCardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/add_flashcard"
+            android:layout_marginBottom="10dp"
+            android:background="@color/accent"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

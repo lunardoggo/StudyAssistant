@@ -5,14 +5,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import de.lunardoggo.studyassistant.R
-import de.lunardoggo.studyassistant.ui.main.FlashCardsFragment
 import de.lunardoggo.studyassistant.ui.main.PlannerFragment
 import de.lunardoggo.studyassistant.ui.main.TimerFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_text_1,
         R.string.tab_text_2,
-        R.string.tab_text_3
 )
 
 /**
@@ -21,7 +19,6 @@ private val TAB_TITLES = arrayOf(
  */
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private val flashCards : FlashCardsFragment = FlashCardsFragment.newInstance();
     private val planner : PlannerFragment = PlannerFragment.newInstance();
     private val timer : TimerFragment = TimerFragment.newInstance();
 
@@ -29,7 +26,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
         return when(position) {
             0 -> this.timer;
             1 -> this.planner;
-            2 -> this.flashCards;
             else -> throw NotImplementedError();
         }
     }
@@ -39,6 +35,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
     }
 
     override fun getCount(): Int {
-        return 3
+        return TAB_TITLES.size
     }
 }

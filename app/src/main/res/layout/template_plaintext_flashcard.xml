@@ -8,29 +8,46 @@
     android:background="@color/accent_light"
     android:id="@+id/flashcardBackground">
 
-    <TextView
-        android:id="@+id/flashcardTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingStart="20dp"
-        android:padding="10dp"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black"
-        android:textSize="16pt"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="10dp"
-        android:background="@color/accent"/>
+        android:background="@color/accent"
+        android:id="@+id/titleLayout">
 
+        <Button
+            android:fontFamily="@font/materialdesignicons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:text="&#xF3EB;"
+            android:textSize="32dp"
+            android:id="@+id/editCardButton"
+            />
+
+        <TextView
+            android:id="@+id/flashcardTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingStart="20dp"
+            android:padding="10dp"
+            android:text="Title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/black"
+            android:textSize="16pt"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="10dp"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/flashcardContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Content"
-        android:layout_below="@id/flashcardTitle"
+        android:layout_below="@id/titleLayout"
         android:textColor="@android:color/black"
         android:layout_marginBottom="30dp"
         android:paddingHorizontal="10dp"

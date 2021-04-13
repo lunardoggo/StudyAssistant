@@ -1,6 +1,5 @@
 package de.lunardoggo.studyassistant
 
-import android.app.Notification
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
@@ -8,19 +7,27 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import de.lunardoggo.studyassistant.android.NotificationHelper
+import de.lunardoggo.studyassistant.events.Event
+import de.lunardoggo.studyassistant.learning.data.StudyAssistantDataSource
 import de.lunardoggo.studyassistant.ui.activities.SettingsActivity
 import de.lunardoggo.studyassistant.ui.adapters.SectionsPagerAdapter
-import de.lunardoggo.studyassistant.ui.main.FlashCardEditorActivity
 
 class MainActivity : AppCompatActivity() {
 
+    public lateinit var dataSource : StudyAssistantDataSource
+        get;
+
     private lateinit var tabLayout : TabLayout;
+
+    public val onEditFlashCardsToggled = Event<Int>();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        instance = this;
+
+        this.dataSource = StudyAssistantDataSource(this.applicationContext);
+
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager);
         val viewPager: ViewPager = this.findViewById(R.id.view_pager);
         viewPager.adapter = sectionsPagerAdapter;
@@ -35,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         if(this.tabLayout.selectedTabPosition < 2) {
             this.showSettingsPage();
         } else {
-            this.showEditFlashcardsView();
+            this.onEditFlashCardsToggled.invoke(0);
         }
     }
 
@@ -44,9 +51,8 @@ class MainActivity : AppCompatActivity() {
         this.startActivity(intent);
     }
 
-    private fun showEditFlashcardsView() {
-        val intent = Intent(this, FlashCardEditorActivity::class.java);
-        this.startActivity(intent);
-        NotificationHelper.showToastShortDuration(this.applicationContext, "Edit page coming soon!", Toast.LENGTH_SHORT);
+    companion object {
+        public lateinit var instance : MainActivity
+            get;
     }
 }
