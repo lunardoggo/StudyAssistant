@@ -4,9 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
-import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantContract.FlashCardGroupEntry
-import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantContract.FlashCardEntry
+import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantContract.StudyReminderEntry
 import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantDatabase
+import de.lunardoggo.studyassistant.learning.models.StudyReminder
 
 class StudyAssistantDataSource {
 
@@ -20,16 +20,46 @@ class StudyAssistantDataSource {
 |           REGION: Updates                     |
 \*---------------------------------------------*/
 
+    public fun updateStudyReminder(reminder : StudyReminder) {
+        val values = this.getStudyReminderContentValues(reminder);
+        val where = "${BaseColumns._ID} = ?";
+        val whereArgs = arrayOf(reminder.id.toString());
+
+        this.update(StudyReminderEntry.TABLE_NAME, values, where, whereArgs);
+    }
 
 /*---------------------------------------------*\
 |           REGION: Inserts                     |
 \*---------------------------------------------*/
 
+    public fun insertStudyReminder(reminder : StudyReminder) {
+        val values = this.getStudyReminderContentValues(reminder);
+        values.put(BaseColumns._ID, this.getNextId(StudyReminderEntry.TABLE_NAME));
+
+        this.insert(StudyReminderEntry.TABLE_NAME, values);
+    }
+
+/*---------------------------------------------*\
+|           REGION: Deletes                     |
+\*---------------------------------------------*/
+
+    public fun deleteStudyReminder(reminder : StudyReminder) {
+        val where = "${BaseColumns._ID} = ?";
+        val whereArgs = arrayOf(reminder.id.toString());
+
+        this.delete(StudyReminderEntry.TABLE_NAME, where, whereArgs);
+    }
 
 /*---------------------------------------------*\
 |           REGION: Values                      |
 \*---------------------------------------------*/
 
+    private fun getStudyReminderContentValues(reminder: StudyReminder) : ContentValues {
+        val values = ContentValues();
+        values.put(StudyReminderEntry.COLUMN_NAME_DESCRIPTION, reminder.description);
+        values.put(StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, reminder.epochSeconds);
+        return values;
+    }
 
 /*---------------------------------------------*\
 |           REGION: Queries                     |

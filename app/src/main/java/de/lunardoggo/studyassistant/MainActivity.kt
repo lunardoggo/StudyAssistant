@@ -19,8 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tabLayout : TabLayout;
 
-    public val onEditFlashCardsToggled = Event<Int>();
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -41,8 +39,6 @@ class MainActivity : AppCompatActivity() {
     private fun onSettingsButtonClicked(view : View) {
         if(this.tabLayout.selectedTabPosition < 2) {
             this.showSettingsPage();
-        } else {
-            this.onEditFlashCardsToggled.invoke(0);
         }
     }
 

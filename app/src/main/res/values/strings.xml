@@ -5,9 +5,8 @@
     <string name="empty"></string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="add_goal">Add Goal</string>
+    <string name="add_study_reminder">Add Reminder</string>
     <string name="interval">Interval:</string>
-    <string name="add_flashcard">Add Flashcard</string>
 
     <string name="config_studySessions_learningMinutes">study_sessions.learning_minutes</string>
     <string name="config_studySessions_breakMinutes">study_sessions.break_minutes</string>
