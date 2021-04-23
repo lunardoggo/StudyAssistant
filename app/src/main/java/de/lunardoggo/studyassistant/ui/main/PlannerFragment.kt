@@ -1,5 +1,6 @@
 package de.lunardoggo.studyassistant.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.CalendarView
 import de.lunardoggo.studyassistant.MainActivity
 import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.learning.data.StudyAssistantDataSource
+import de.lunardoggo.studyassistant.ui.activities.StudyReminderEditorActivity
 import java.time.LocalDate
 
 class PlannerFragment : Fragment() {
@@ -32,6 +34,8 @@ class PlannerFragment : Fragment() {
     }
 
     private fun onAddReminderClicked(view : View) {
+        val intent = Intent(this.requireContext(), StudyReminderEditorActivity::class.java);
+        this.requireActivity().startActivityForResult(intent, RequestCodes.REQUEST_STUDY_REMINDER);
     }
 
     private fun onSelectedDateChanged(view : CalendarView, year : Int, month : Int, dayOfMonth : Int) {

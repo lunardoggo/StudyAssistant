@@ -2,7 +2,7 @@ package de.lunardoggo.studyassistant.ui.main
 
 class RequestCodes {
     companion object {
-        public val REQUEST_FLASHCARD = 10;
+        public val REQUEST_STUDY_REMINDER = 10;
     }
 }
 

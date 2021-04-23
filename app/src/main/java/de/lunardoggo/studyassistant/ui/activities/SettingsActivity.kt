@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        this.setContentView(R.layout.activity_settings)
 
         this.editIntervalCount = this.findViewById(R.id.editIntervalCount);
         this.editLearnTimer = this.findViewById(R.id.editLearnTimer);
@@ -30,13 +30,13 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun onEditNumberSessionTimers(view : View, hasFocus : Boolean) {
         if(!hasFocus && view is EditText) {
-            this.validateEditNumberValue(view as EditText, 1, 120);
+            this.validateEditNumberValue(view, 1, 120);
         }
     }
 
     private fun onEditNumberSessionIntervals(view : View, hasFocus : Boolean) {
         if(!hasFocus && view is EditText) {
-            this.validateEditNumberValue(view as EditText, 1, 20);
+            this.validateEditNumberValue(view, 1, 20);
         }
     }
 

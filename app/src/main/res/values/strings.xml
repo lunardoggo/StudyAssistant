@@ -18,4 +18,12 @@
     <string name="alert_cancelSession_message">Do you really want to cancel the current learing session?</string>
 
     <string name="error_fill_all_fields">Please fill all the fields with the requested information.</string>
+    <string name="title_activity_study_reminder_editor">StudyReminderEditorActivity</string>
+
+    <string name="study_reminder_edit">Edit Study Reminder</string>
+    <string name="study_reminder_description">Description</string>
+    <string name="study_reminder_title">Title</string>
+    <string name="study_reminder_date">Date</string>
+
+    <string name="general_save">Save</string>
 </resources>

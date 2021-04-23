@@ -54,9 +54,11 @@ class StudyAssistantDataSource {
 |           REGION: Values                      |
 \*---------------------------------------------*/
 
-    private fun getStudyReminderContentValues(reminder: StudyReminder) : ContentValues {
+    private fun getStudyReminderContentValues(reminder : StudyReminder) : ContentValues {
         val values = ContentValues();
+        values.put(StudyReminderEntry.COLUMN_NAME_TITLE, reminder.title);
         values.put(StudyReminderEntry.COLUMN_NAME_DESCRIPTION, reminder.description);
+        values.put(StudyReminderEntry.COLUMN_NAME_IMPORTANCE, reminder.importanceInt);
         values.put(StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, reminder.epochSeconds);
         return values;
     }
