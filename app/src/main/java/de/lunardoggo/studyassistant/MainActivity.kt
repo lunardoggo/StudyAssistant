@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
+import de.lunardoggo.studyassistant.events.Event
 import de.lunardoggo.studyassistant.learning.data.StudyAssistantDataSource
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.learning.utility.StudyReminderIntentConverter
@@ -16,6 +17,8 @@ import de.lunardoggo.studyassistant.ui.main.RequestCodes
 import de.lunardoggo.studyassistant.ui.main.ResultCodes
 
 class MainActivity : AppCompatActivity() {
+
+    public val studyRemindersChanged = Event<StudyReminder>();
 
     public lateinit var dataSource : StudyAssistantDataSource
         get;
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 this.dataSource.updateStudyReminder(reminder);
             }
+            this.studyRemindersChanged.invoke(reminder);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

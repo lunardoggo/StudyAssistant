@@ -7,6 +7,8 @@ import android.provider.BaseColumns
 import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantContract.StudyReminderEntry
 import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantDatabase
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
+import java.time.LocalDate
+import java.time.ZoneId
 
 class StudyAssistantDataSource {
 
@@ -67,10 +69,19 @@ class StudyAssistantDataSource {
 |           REGION: Queries                     |
 \*---------------------------------------------*/
 
+    public fun getStudyReminders() : List<StudyReminder> {
+        val columns = arrayOf(BaseColumns._ID, StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, StudyReminderEntry.COLUMN_NAME_DESCRIPTION, StudyReminderEntry.COLUMN_NAME_IMPORTANCE, StudyReminderEntry.COLUMN_NAME_TITLE);
+        val currentDateSeconds = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().epochSecond;
+        val where = "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} <= ?";
+        val cursor = this.query(StudyReminderEntry.TABLE_NAME, columns, where, arrayOf(currentDateSeconds.toString()), "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} ASC");
+        val output = this.mapStudyReminders(cursor);
+        cursor.close();
+        return output;
+    }
 
     private fun getNextId(table : String) : Int {
         val columns = arrayOf("MAX(${BaseColumns._ID}) AS ${BaseColumns._ID}");
-        val cursor = this.query(table, columns, "", arrayOf());
+        val cursor = this.query(table, columns, "", arrayOf(), "");
         if(cursor.moveToNext()) {
             return cursor.getInt(cursor.getColumnIndexOrThrow(BaseColumns._ID)) + 1;
         }
@@ -78,12 +89,32 @@ class StudyAssistantDataSource {
     }
 
 /*---------------------------------------------*\
+ |          REGION: Mappers                     |
+\*---------------------------------------------*/
+
+    private fun mapStudyReminders(cursor : Cursor) : List<StudyReminder> {
+        val output = ArrayList<StudyReminder>();
+        cursor.apply {
+            while(this.moveToNext()) {
+                val reminder = StudyReminder();
+                reminder.id = this.getInt(this.getColumnIndexOrThrow(BaseColumns._ID));
+                reminder.epochSeconds = this.getLong(this.getColumnIndexOrThrow(StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS));
+                reminder.description = this.getString(this.getColumnIndexOrThrow(StudyReminderEntry.COLUMN_NAME_DESCRIPTION));
+                reminder.importanceInt = this.getInt(this.getColumnIndexOrThrow(StudyReminderEntry.COLUMN_NAME_IMPORTANCE));
+                reminder.title = this.getString(this.getColumnIndexOrThrow(StudyReminderEntry.COLUMN_NAME_TITLE));
+                output.add(reminder);
+            }
+        }
+        return output;
+    }
+
+/*---------------------------------------------*\
 |          REGION: SQL Basics                   |
 \*---------------------------------------------*/
 
-    private fun query(table : String, columns : Array<String>, whereColumns : String, whereArgs : Array<String>) : Cursor {
+    private fun query(table : String, columns : Array<String>, whereColumns : String, whereArgs : Array<String>, orderBy : String) : Cursor {
         synchronized(this.database) {
-            return this.database.readableDatabase!!.query(table, columns, whereColumns, whereArgs, null, null, null);
+            return this.database.readableDatabase!!.query(table, columns, whereColumns, whereArgs, null, null, orderBy);
         }
     }
 
