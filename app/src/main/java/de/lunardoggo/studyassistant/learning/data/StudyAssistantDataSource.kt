@@ -72,7 +72,7 @@ class StudyAssistantDataSource {
     public fun getStudyReminders() : List<StudyReminder> {
         val columns = arrayOf(BaseColumns._ID, StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, StudyReminderEntry.COLUMN_NAME_DESCRIPTION, StudyReminderEntry.COLUMN_NAME_IMPORTANCE, StudyReminderEntry.COLUMN_NAME_TITLE);
         val currentDateSeconds = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().epochSecond;
-        val where = "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} <= ?";
+        val where = "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} >= ?";
         val cursor = this.query(StudyReminderEntry.TABLE_NAME, columns, where, arrayOf(currentDateSeconds.toString()), "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} ASC");
         val output = this.mapStudyReminders(cursor);
         cursor.close();

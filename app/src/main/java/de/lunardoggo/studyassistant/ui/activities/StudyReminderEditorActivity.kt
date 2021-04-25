@@ -117,7 +117,8 @@ class StudyReminderEditorActivity : AppCompatActivity() {
         return DatePickerDialog.OnDateSetListener { _picker, _year, _month, _day ->
             run {
                 this.updateReminderValues();
-                this.reminder.date = LocalDate.of(_year, _month, _day).atStartOfDay(ZoneId.systemDefault()).toInstant();
+                //month is 0-based, while LocalDate is 1-based -> increment by 1
+                this.reminder.date = LocalDate.of(_year, _month + 1, _day).atStartOfDay(ZoneId.systemDefault()).toInstant();
                 this.updateDisplayValues();
             }
         };
