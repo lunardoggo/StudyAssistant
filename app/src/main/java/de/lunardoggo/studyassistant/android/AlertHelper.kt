@@ -12,7 +12,7 @@ class AlertHelper {
             builder.setTitle(title);
 
             builder.setPositiveButton("Yes", onClickListener);
-            builder.setNegativeButton("No") { _interface, _int -> _interface.cancel(); };
+            builder.setNegativeButton("No") { _interface, _ -> _interface.cancel(); };
 
             return builder.create();
         }

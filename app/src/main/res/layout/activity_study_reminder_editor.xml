@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
+        android:maxHeight="300dp"
         android:ems="12"
         android:gravity="top"
         android:hint="@string/study_reminder_description"

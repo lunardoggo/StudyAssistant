@@ -2,13 +2,15 @@ package de.lunardoggo.studyassistant.ui.main
 
 class RequestCodes {
     companion object {
-        public val REQUEST_STUDY_REMINDER = 10;
+        public const val REQUEST_ADD_STUDY_REMINDER = 10;
+        public const val REQUEST_EDIT_STUDY_REMINDER = 11;
     }
 }
 
 class ResultCodes {
     companion object {
-        public val RESULT_OK = 0;
-        public val RESULT_CANCEL = 1;
+        public const val RESULT_DELETE_STUDY_REMINDER = 10;
+        public const val RESULT_CANCEL = 0;
+        public const val RESULT_OK = 1;
     }
 }

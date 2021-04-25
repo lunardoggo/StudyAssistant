@@ -20,7 +20,7 @@ class StudyReminderListViewAdapter(context: Context, resource: Int) : ArrayAdapt
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val reminder = this.getItem(position) as StudyReminder;
-        return convertView ?: getInflatedView(parent).apply {
+        return (convertView ?: getInflatedView(parent)).apply {
             setViewValues(this, reminder);
         };
     }

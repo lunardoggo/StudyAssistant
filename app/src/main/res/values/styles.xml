@@ -3,4 +3,7 @@
     <style name="Widget.Theme.StudyAssistant.MyView" parent="">
         <item name="android:background">@color/secondary_text</item>
     </style>
+    <style name="style_material_design_font">
+        <item name="fontFamily">@font/materialdesignicons</item>
+    </style>
 </resources>

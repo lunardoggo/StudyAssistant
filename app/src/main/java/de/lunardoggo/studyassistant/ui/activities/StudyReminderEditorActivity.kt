@@ -3,18 +3,21 @@ package de.lunardoggo.studyassistant.ui.activities
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import de.lunardoggo.studyassistant.R
+import de.lunardoggo.studyassistant.android.AlertHelper
 import de.lunardoggo.studyassistant.android.NotificationHelper
 import de.lunardoggo.studyassistant.learning.models.Importance
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.learning.utility.StudyReminderIntentConverter
+import de.lunardoggo.studyassistant.ui.main.RequestCodes
 import de.lunardoggo.studyassistant.ui.main.ResultCodes
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.TemporalField
 import java.util.*
 
 class StudyReminderEditorActivity : AppCompatActivity() {
@@ -47,6 +50,38 @@ class StudyReminderEditorActivity : AppCompatActivity() {
 
         this.updateDisplayValues();
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        this.menuInflater.inflate(R.menu.menu_study_reminder_editor, menu);
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.reminderDeleteButton -> this.showDeleteStudyReminder();
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDeleteStudyReminder() {
+        if(this.reminder.id == StudyReminder.DefaultId) {
+            this.requestDeleteStudyReminder();
+        } else {
+            val message = this.getString(R.string.alert_study_reminder_delete_message);
+            val title = this.getString(R.string.alert_study_reminder_delete_title);
+            AlertHelper.createYesNoAlert(this, title, message) { _dialog, _ ->
+                _dialog.dismiss();
+                this.requestDeleteStudyReminder();
+            }.show();
+        }
+    }
+
+    private fun requestDeleteStudyReminder() {
+        val data = StudyReminderIntentConverter.instance.convertTo(this.reminder);
+        this.setResult(ResultCodes.RESULT_DELETE_STUDY_REMINDER, data);
+        this.finish();
+    }
+
 
     private fun getImportanceAdapter() : ArrayAdapter<Importance> {
         return ArrayAdapter<Importance>(this.applicationContext, android.R.layout.simple_spinner_item, Importance.values().sortedByDescending { _importance -> _importance.intValue });

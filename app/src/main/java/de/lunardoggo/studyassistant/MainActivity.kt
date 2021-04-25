@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        this.setContentView(R.layout.activity_main);
         instance = this;
 
         this.dataSource = StudyAssistantDataSource(this.applicationContext);
@@ -54,16 +54,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == RequestCodes.REQUEST_STUDY_REMINDER && resultCode == ResultCodes.RESULT_OK) {
-            val reminder = StudyReminderIntentConverter.instance.convertFrom(data!!);
-            if(reminder.id == StudyReminder.DefaultId) {
-                this.dataSource.insertStudyReminder(reminder);
-            } else {
-                this.dataSource.updateStudyReminder(reminder);
+        if(resultCode == ResultCodes.RESULT_OK) {
+            when(requestCode) {
+                RequestCodes.REQUEST_ADD_STUDY_REMINDER -> this.saveStudyReminder(data!!);
+                RequestCodes.REQUEST_EDIT_STUDY_REMINDER -> this.saveStudyReminder(data!!);
             }
-            this.studyRemindersChanged.invoke(reminder);
+        } else if(resultCode == ResultCodes.RESULT_DELETE_STUDY_REMINDER) {
+            this.deleteStudyReminder(data!!);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private fun saveStudyReminder(data : Intent) {
+        val reminder = StudyReminderIntentConverter.instance.convertFrom(data);
+        if(reminder.id == StudyReminder.DefaultId) {
+            this.dataSource.insertStudyReminder(reminder);
+        } else {
+            this.dataSource.updateStudyReminder(reminder);
+        }
+        this.studyRemindersChanged.invoke(reminder);
+    }
+
+    private fun deleteStudyReminder(data : Intent) {
+        val reminder = StudyReminderIntentConverter.instance.convertFrom(data);
+        if(reminder.id != StudyReminder.DefaultId) {
+            this.dataSource.deleteStudyReminder(reminder);
+        }
+        this.studyRemindersChanged.invoke(reminder);
     }
 
     companion object {
