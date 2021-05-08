@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import de.lunardoggo.studyassistant.R
-import de.lunardoggo.studyassistant.android.NotificationHelper
+import de.lunardoggo.studyassistant.android.NotificationPublisher
 import de.lunardoggo.studyassistant.config.ConfigurationLoader
 
 class SettingsActivity : AppCompatActivity() {
@@ -75,7 +75,7 @@ class SettingsActivity : AppCompatActivity() {
         config.studySessions.intervalCount = this.editIntervalCount.text.toString().toInt();
 
         ConfigurationLoader.instance.save(this.applicationContext, config);
-        NotificationHelper.showToastShortDuration(this.applicationContext, "Config saved.", Toast.LENGTH_SHORT);
+        NotificationPublisher.showToastShortDuration(this.applicationContext, "Config saved.", Toast.LENGTH_SHORT);
     }
 
     private fun loadSettings() {

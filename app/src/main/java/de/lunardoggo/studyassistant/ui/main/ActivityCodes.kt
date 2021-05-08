@@ -4,6 +4,7 @@ class RequestCodes {
     companion object {
         public const val REQUEST_ADD_STUDY_REMINDER = 10;
         public const val REQUEST_EDIT_STUDY_REMINDER = 11;
+        public const val REQUEST_MAIN_ACTIVITY = 12;
     }
 }
 

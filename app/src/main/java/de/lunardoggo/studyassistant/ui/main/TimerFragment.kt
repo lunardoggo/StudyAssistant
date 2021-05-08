@@ -15,13 +15,16 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import de.lunardoggo.studyassistant.R
+import de.lunardoggo.studyassistant.android.AlarmScheduler
 import de.lunardoggo.studyassistant.android.AlertHelper
 import de.lunardoggo.studyassistant.config.ConfigurationLoader
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
 import de.lunardoggo.studyassistant.learning.sessions.SessionTimer
-import de.lunardoggo.studyassistant.android.NotificationHelper
+import de.lunardoggo.studyassistant.android.NotificationPublisher
+import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.ui.animations.ProgressBarAnimation
 import java.text.DecimalFormat
+import java.time.Instant
 
 class TimerFragment : Fragment() {
 
@@ -52,9 +55,7 @@ class TimerFragment : Fragment() {
         this.progressBarAnimation = ProgressBarAnimation(this.timerProgress);
 
         this.toggleStartButton = fragment.findViewById(R.id.toggleStartButton);
-        this.toggleStartButton.setOnClickListener { _view ->
-            this.onToggleStartPressed(_view);
-        };
+        this.toggleStartButton.setOnClickListener(::onToggleStartPressed);
         this.resetTimerDisplay(SessionStatus.NONE);
         return fragment;
     }
@@ -78,7 +79,7 @@ class TimerFragment : Fragment() {
                 SessionStatus.LEARNING
             );
             this.updateIntervalDisplayLabel(1, this.intervalCount);
-            NotificationHelper.sendSessionProgressNotification(
+            NotificationPublisher.sendSessionProgressNotification(
                 this.requireContext(),
                 this.timer.currentStatus,
                 0,
@@ -97,7 +98,7 @@ class TimerFragment : Fragment() {
 
     private fun onTimerLearningIntervalFinished(intervalNumber: Int) {
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
-        NotificationHelper.sendSessionProgressNotification(
+        NotificationPublisher.sendSessionProgressNotification(
             this.requireContext(),
             this.timer.currentStatus,
             intervalNumber,
@@ -108,7 +109,7 @@ class TimerFragment : Fragment() {
     private fun onTimerLearningIntervalStarted(intervalNumber: Int) {
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
         this.updateIntervalDisplayLabel(intervalNumber + 1, this.intervalCount);
-        NotificationHelper.sendSessionProgressNotification(
+        NotificationPublisher.sendSessionProgressNotification(
             this.requireContext(),
             this.timer.currentStatus,
             intervalNumber,
@@ -120,7 +121,7 @@ class TimerFragment : Fragment() {
         this.resetTimerDisplay(SessionStatus.FINISHED);
         this.playIntervalNotificationSound(AudioManager.STREAM_ALARM);
         this.updateIntervalDisplayLabel(completedIntervals, this.intervalCount);
-        NotificationHelper.sendSessionProgressNotification(
+        NotificationPublisher.sendSessionProgressNotification(
             this.requireContext(),
             this.timer.currentStatus,
             0,

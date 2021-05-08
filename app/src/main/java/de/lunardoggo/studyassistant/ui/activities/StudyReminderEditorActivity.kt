@@ -10,11 +10,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.android.AlertHelper
-import de.lunardoggo.studyassistant.android.NotificationHelper
+import de.lunardoggo.studyassistant.android.NotificationPublisher
 import de.lunardoggo.studyassistant.learning.models.Importance
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.learning.utility.StudyReminderIntentConverter
-import de.lunardoggo.studyassistant.ui.main.RequestCodes
 import de.lunardoggo.studyassistant.ui.main.ResultCodes
 import java.time.LocalDate
 import java.time.ZoneId
@@ -84,7 +83,9 @@ class StudyReminderEditorActivity : AppCompatActivity() {
 
 
     private fun getImportanceAdapter() : ArrayAdapter<Importance> {
-        return ArrayAdapter<Importance>(this.applicationContext, android.R.layout.simple_spinner_item, Importance.values().sortedByDescending { _importance -> _importance.intValue });
+        val importanceList = Importance.values().sortedByDescending { _importance -> _importance.intValue };
+        val layoutId = android.R.layout.simple_spinner_item;
+        return ArrayAdapter<Importance>(this.applicationContext, layoutId, importanceList);
     }
 
     private fun getStudyReminder() : StudyReminder {
@@ -100,11 +101,12 @@ class StudyReminderEditorActivity : AppCompatActivity() {
 
     private fun onSaveReminderClicked(view: View?) {
         this.updateReminderValues();
-        if(this.reminder.title.isNotEmpty() && this.reminder.description.isNotEmpty()) {
+        if(this.reminder.title.isNotEmpty()) {
             this.setResult(ResultCodes.RESULT_OK, StudyReminderIntentConverter.instance.convertTo(this.reminder));
             this.finish();
         } else {
-            NotificationHelper.showToastShortDuration(this.applicationContext, "Please fill all inputs", Toast.LENGTH_LONG);
+            val text = this.getString(R.string.study_reminder_fields_empty);
+            NotificationPublisher.showToastShortDuration(this.applicationContext, text, Toast.LENGTH_LONG);
         }
     }
 
@@ -130,7 +132,8 @@ class StudyReminderEditorActivity : AppCompatActivity() {
         val format = DateFormat.getDateFormat(this.applicationContext);
         this.dateInput.setText(format.format(Date.from(this.reminder.date)));
 
-        this.importanceInput.setSelection((this.importanceInput.adapter as ArrayAdapter<Importance>).getPosition(this.reminder.importance));
+        val adapter = this.importanceInput.adapter as ArrayAdapter<Importance>;
+        this.importanceInput.setSelection(adapter.getPosition(this.reminder.importance));
 
         this.descriptionInput.setText(this.reminder.description);
     }
