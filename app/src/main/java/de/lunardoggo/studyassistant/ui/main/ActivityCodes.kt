@@ -2,9 +2,11 @@ package de.lunardoggo.studyassistant.ui.main
 
 class RequestCodes {
     companion object {
-        public const val REQUEST_ADD_STUDY_REMINDER = 10;
-        public const val REQUEST_EDIT_STUDY_REMINDER = 11;
-        public const val REQUEST_MAIN_ACTIVITY = 12;
+        public const val REQUEST_SHOW_ADD_STUDY_REMINDER = 10;
+        public const val REQUEST_SHOW_EDIT_STUDY_REMINDER = 11;
+        public const val REQUEST_SHOW_MAIN_ACTIVITY = 12;
+
+        public const val REQUEST_SCHEDULE_REMINDER = 101;
     }
 }
 

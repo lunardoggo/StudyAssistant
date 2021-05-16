@@ -5,9 +5,11 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
+import androidx.core.app.AlarmManagerCompat
+import de.lunardoggo.studyassistant.MainActivity
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.learning.utility.StudyReminderIntentConverter
+import de.lunardoggo.studyassistant.ui.main.RequestCodes
 
 class AlarmScheduler : BroadcastReceiver() {
 
@@ -17,11 +19,11 @@ class AlarmScheduler : BroadcastReceiver() {
                 "show_reminder_notification" -> { //TODO: Enum or constants
                     val reminder = StudyReminderIntentConverter.instance.convertFrom(intent);
                     NotificationPublisher.showStudyReminderNotification(context, reminder);
+                    MainActivity.instance.scheduleNextReminderNotification();
                 };
             }
         }
     }
-
 
     companion object {
 
@@ -29,10 +31,10 @@ class AlarmScheduler : BroadcastReceiver() {
 
         public fun scheduleStudyReminder(context : Context, reminder : StudyReminder, utcMillis : Long) {
             val baseIntent = Intent(context, AlarmScheduler::class.java)
-            val intent = StudyReminderIntentConverter.instance.convertTo(reminder, baseIntent).apply {
+            val pendingIntent = StudyReminderIntentConverter.instance.convertTo(reminder, baseIntent).apply {
                 this.putExtra(AlarmScheduler.IntentActionField, "show_reminder_notification"); //TODO: Enum or constants
-            }.let { _intent -> PendingIntent.getBroadcast(context, 0, _intent, PendingIntent.FLAG_ONE_SHOT) };
-            this.scheduleOnceRTC(context, System.currentTimeMillis() + 1000, intent);
+            }.let { _intent -> PendingIntent.getBroadcast(context, RequestCodes.REQUEST_SCHEDULE_REMINDER, _intent, PendingIntent.FLAG_ONE_SHOT) };
+            this.scheduleOnceRTC(context, utcMillis, pendingIntent);
         }
 
         private fun scheduleOnceRTC(context : Context, utcMillis : Long, intent : PendingIntent) {

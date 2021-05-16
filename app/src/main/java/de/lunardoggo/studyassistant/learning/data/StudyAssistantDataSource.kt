@@ -7,8 +7,7 @@ import android.provider.BaseColumns
 import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantContract.StudyReminderEntry
 import de.lunardoggo.studyassistant.learning.data.sqlite.StudyAssistantDatabase
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
-import java.time.LocalDate
-import java.time.ZoneId
+import java.time.*
 
 class StudyAssistantDataSource {
 
@@ -69,11 +68,19 @@ class StudyAssistantDataSource {
 |           REGION: Queries                     |
 \*---------------------------------------------*/
 
-    public fun getStudyReminders() : List<StudyReminder> {
-        val columns = arrayOf(BaseColumns._ID, StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, StudyReminderEntry.COLUMN_NAME_DESCRIPTION, StudyReminderEntry.COLUMN_NAME_IMPORTANCE, StudyReminderEntry.COLUMN_NAME_TITLE);
+    public fun getNextPendingStudyReminder() : StudyReminder? {
+        val currentTime = Instant.now().epochSecond;
+        return this.getStudyRemindersAfterUtcSeconds(currentTime).minByOrNull { _reminder -> _reminder.date.epochSecond };
+    }
+
+    public fun getPendingStudyReminders() : List<StudyReminder> {
         val currentDateSeconds = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().epochSecond;
+        return this.getStudyRemindersAfterUtcSeconds(currentDateSeconds);
+    }
+
+    private fun getStudyRemindersAfterUtcSeconds(seconds : Long) : List<StudyReminder> {
         val where = "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} >= ?";
-        val cursor = this.query(StudyReminderEntry.TABLE_NAME, columns, where, arrayOf(currentDateSeconds.toString()), "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} ASC");
+        val cursor = this.query(StudyReminderEntry.TABLE_NAME, this.studyRemindersAllColumns, where, arrayOf(seconds.toString()), "${StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS} ASC");
         val output = this.mapStudyReminders(cursor);
         cursor.close();
         return output;
@@ -107,6 +114,11 @@ class StudyAssistantDataSource {
         }
         return output;
     }
+
+/*---------------------------------------------*\
+|        REGION: StudyReminder Basics           |
+\*---------------------------------------------*/
+    private val studyRemindersAllColumns = arrayOf(BaseColumns._ID, StudyReminderEntry.COLUMN_NAME_EPOCH_SECONDS, StudyReminderEntry.COLUMN_NAME_DESCRIPTION, StudyReminderEntry.COLUMN_NAME_IMPORTANCE, StudyReminderEntry.COLUMN_NAME_TITLE);
 
 /*---------------------------------------------*\
 |          REGION: SQL Basics                   |

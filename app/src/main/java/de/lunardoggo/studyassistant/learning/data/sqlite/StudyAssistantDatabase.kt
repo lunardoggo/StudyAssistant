@@ -11,7 +11,11 @@ class StudyAssistantDatabase(context : Context) : SQLiteOpenHelper(context, DATA
     }
 
     override fun onUpgrade(database: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        //TODO implement!
+
+    }
+
+    override fun onDowngrade(database: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+
     }
 
     companion object {

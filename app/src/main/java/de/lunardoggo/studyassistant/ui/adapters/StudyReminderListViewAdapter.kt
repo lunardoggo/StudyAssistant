@@ -1,7 +1,6 @@
 package de.lunardoggo.studyassistant.ui.adapters
 
 import android.content.Context
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,10 @@ import android.widget.TextView
 import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.learning.models.Importance
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
-import java.util.*
+import de.lunardoggo.studyassistant.learning.utility.DateTimeUtility
 
 class StudyReminderListViewAdapter(context: Context, resource: Int) : ArrayAdapter<StudyReminder>(context, resource) {
 
-    private val format = DateFormat.getDateFormat(this.context);
     private val inflater = LayoutInflater.from(this.context);
     private val templateResource : Int = resource;
 
@@ -28,7 +26,7 @@ class StudyReminderListViewAdapter(context: Context, resource: Int) : ArrayAdapt
     private fun setViewValues(view : View, reminder : StudyReminder) {
         val viewHolder = view.tag as ViewHolder;
         viewHolder.importanceView!!.setBackgroundColor(this.getImportanceColor(reminder.importance));
-        viewHolder.dateText!!.text = format.format(Date.from(reminder.date));
+        viewHolder.dateText!!.text = DateTimeUtility.getFormattedReminderDateTime(this.context, reminder.date);
         viewHolder.titleText!!.text = reminder.title;
     }
 

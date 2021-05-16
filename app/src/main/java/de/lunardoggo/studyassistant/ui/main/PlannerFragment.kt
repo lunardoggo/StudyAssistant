@@ -53,7 +53,7 @@ class PlannerFragment : Fragment() {
 
     private fun onListViewItemClicked(adapterView: AdapterView<*>?, clickedView: View?, position: Int, id: Long) {
         val reminder = this.reminderList.getItemAtPosition(position) as StudyReminder;
-        this.showStudyReminderEditor(reminder, RequestCodes.REQUEST_EDIT_STUDY_REMINDER);
+        this.showStudyReminderEditor(reminder, RequestCodes.REQUEST_SHOW_EDIT_STUDY_REMINDER);
     }
 
     private fun onStudyRemindersChanged(studyReminder: StudyReminder) {
@@ -62,9 +62,9 @@ class PlannerFragment : Fragment() {
 
     private fun onAddReminderClicked(view : View) {
         val reminder = StudyReminder();
-        reminder.date = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+        reminder.date = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).plusMinutes(12 * 60).toInstant();
         reminder.importance = Importance.NORMAL;
-        this.showStudyReminderEditor(reminder, RequestCodes.REQUEST_ADD_STUDY_REMINDER);
+        this.showStudyReminderEditor(reminder, RequestCodes.REQUEST_SHOW_ADD_STUDY_REMINDER);
     }
 
     private fun showStudyReminderEditor(reminder : StudyReminder, requestCode : Int) {
@@ -74,7 +74,7 @@ class PlannerFragment : Fragment() {
 
     private fun updateReminderList() {
         this.reminderListAdapter.clear();
-        this.reminderListAdapter.addAll(this.dataSource.getStudyReminders());
+        this.reminderListAdapter.addAll(this.dataSource.getPendingStudyReminders());
         this.reminderListAdapter.notifyDataSetChanged();
     }
 

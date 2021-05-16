@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
+import de.lunardoggo.studyassistant.android.AlarmScheduler
 import de.lunardoggo.studyassistant.events.Event
 import de.lunardoggo.studyassistant.learning.data.StudyAssistantDataSource
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
@@ -56,8 +57,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode == ResultCodes.RESULT_OK) {
             when(requestCode) {
-                RequestCodes.REQUEST_ADD_STUDY_REMINDER -> this.saveStudyReminder(data!!);
-                RequestCodes.REQUEST_EDIT_STUDY_REMINDER -> this.saveStudyReminder(data!!);
+                RequestCodes.REQUEST_SHOW_EDIT_STUDY_REMINDER -> this.saveStudyReminder(data!!);
+                RequestCodes.REQUEST_SHOW_ADD_STUDY_REMINDER -> this.saveStudyReminder(data!!);
             }
         } else if(resultCode == ResultCodes.RESULT_DELETE_STUDY_REMINDER) {
             this.deleteStudyReminder(data!!);
@@ -73,6 +74,14 @@ class MainActivity : AppCompatActivity() {
             this.dataSource.updateStudyReminder(reminder);
         }
         this.studyRemindersChanged.invoke(reminder);
+        this.scheduleNextReminderNotification();
+    }
+
+    public fun scheduleNextReminderNotification() {
+        val nextPending = this.dataSource.getNextPendingStudyReminder();
+        if(nextPending != null) {
+            AlarmScheduler.scheduleStudyReminder(this.applicationContext, nextPending, nextPending.date.toEpochMilli());
+        }
     }
 
     private fun deleteStudyReminder(data : Intent) {

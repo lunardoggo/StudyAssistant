@@ -2,12 +2,15 @@ package de.lunardoggo.studyassistant.android
 
 import android.app.*
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import de.lunardoggo.studyassistant.MainActivity
 import de.lunardoggo.studyassistant.R
 import de.lunardoggo.studyassistant.learning.models.StudyReminder
 import de.lunardoggo.studyassistant.learning.sessions.SessionStatus
+import de.lunardoggo.studyassistant.ui.main.RequestCodes
 
 
 class NotificationPublisher {
@@ -25,10 +28,11 @@ class NotificationPublisher {
             val icon = R.drawable.ic_launcher_foreground;
             val title = reminder.title;
 
-            val builder = getNotificationBuilder(context, NotificationChannelId, icon, title, content);
-            builder.priority = NotificationCompat.PRIORITY_DEFAULT;
+            val builder = getNotificationBuilder(context, NotificationChannelId, icon, title, content).apply {
+                this.priority = NotificationCompat.PRIORITY_DEFAULT;
+            };
 
-            sendReminderNotification(context, builder);
+            this.sendReminderNotification(context, builder);
         }
 
         public fun sendSessionProgressNotification(context: Context, status: SessionStatus, currentInterval: Int, totalIntervals: Int) {
@@ -45,7 +49,7 @@ class NotificationPublisher {
             );
             builder.priority = NotificationCompat.PRIORITY_DEFAULT;
 
-            sendProgressNotification(context, builder);
+            this.sendProgressNotification(context, builder);
         }
 
         private fun sendProgressNotification(context: Context, builder: NotificationCompat.Builder) {
